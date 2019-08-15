@@ -9,15 +9,13 @@ import {
     ServiceOrientedApp
 } from "infrastructure-components";
 
-
+const SERVICE_ID = "myservice";
 
 async function callMyService () {
 
     await callService(
-        "myservice",
-        {
-            some: "data"
-        },
+        SERVICE_ID,
+        { some: "data" },
         (data: any) => {
             console.log("received data: ", data);
 
@@ -25,32 +23,28 @@ async function callMyService () {
         (error) => {
             console.log("error: " , error)
         }
-
     );
-
 
 }
 
 export default (
     <ServiceOrientedApp
-        stackName = "soa-exampleb"
+        stackName = "soa-example"
         buildPath = 'build'
         region='eu-west-1'>
 
-        <Environment
-            name="dev"
-        />
+        <Environment name="dev"/>
 
         <Route
             path='/'
-            name='Infrastructure-Components'
+            name='My Service-Oriented React App'
             render={()=><div>
                 <button onClick={callMyService}>Hello Infrastructure-Components!</button>
             </div>}
         />
 
         <Service
-            id="myservice"
+            id={ SERVICE_ID }
             path="/myservice"
             method="POST">
 
@@ -62,13 +56,9 @@ export default (
 
                     res.status(200).set({
                         "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
-                        "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
                     }).send("ok");
-
 
             }}/>
 
         </Service>
-
-
     </ServiceOrientedApp>);
